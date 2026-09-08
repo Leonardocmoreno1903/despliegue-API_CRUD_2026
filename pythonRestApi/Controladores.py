@@ -13,6 +13,12 @@ app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'clave-local')
 CORS(app)
 usuarios = ModelUsuarios() 
 
+@app.route('/')
+def inicio():
+    return jsonify({
+        "mensaje": "API CRUD funcionando correctamente",
+        "estado": "Conectado a Railway y MySQL"
+    })
 
 @app.route('/login', methods=['POST'])
 def loginUsuario():
