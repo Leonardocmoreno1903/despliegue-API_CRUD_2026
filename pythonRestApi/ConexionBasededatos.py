@@ -56,6 +56,9 @@ class ConexionMysql:
 
     def __init__(self):
         try:
+
+            print("BASE DE DATOS RECIBIDA:", os.getenv("MYSQL_DATABASE"))
+
             self.mibasededatos = mysql.connector.connect(
                 host=os.getenv("MYSQLHOST"),
                 port=int(os.getenv("MYSQLPORT", "3306")),
@@ -68,11 +71,10 @@ class ConexionMysql:
             self.cursor = self.conexion.cursor()
 
             if self.mibasededatos.is_connected():
-                db_info = self.mibasededatos.get_server_info()
 
-                print(
-                    f"CONECTADO A MYSQL SERVER, VERSION: {db_info}"
-                )
+                db_Info = self.mibasededatos.get_server_info()
+
+                print(f"CONECTADO A MYSQL SERVER, VERSION: {db_Info}")
 
         except Error as error:
             print("Error al conectar con MySQL:", error)
