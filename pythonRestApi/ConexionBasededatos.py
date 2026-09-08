@@ -1,4 +1,4 @@
-import os
+""" import os
 import mysql.connector
 from mysql.connector import Error
 
@@ -45,4 +45,36 @@ class ConexionMysql:
 if __name__ == "__main__":
 
     conexion = ConexionMysql()
-    conexion.cerrar_conexion()
+    conexion.cerrar_conexion() """
+
+import os
+import mysql.connector
+from mysql.connector import Error
+
+
+class ConexionMysql:
+
+    def __init__(self):
+        try:
+
+            self.mibasededatos = mysql.connector.connect(
+                host=os.getenv("MYSQLHOST"),
+                port=os.getenv("MYSQLPORT"),
+                user=os.getenv("MYSQLUSER"),
+                password=os.getenv("MYSQLPASSWORD"),
+                database=os.getenv("MYSQL_DATABASE")
+            )
+
+            self.conexion = self.mibasededatos
+            self.cursor = self.conexion.cursor()
+
+            if self.mibasededatos.is_connected():
+
+                db_Info = self.mibasededatos.get_server_info()
+
+                print(
+                    f"CONETADO A MYSQL SERVER, VERSION: {db_Info}"
+                )
+
+        except Error as error:
+            print("Error al conectar con MySQL:", error)
