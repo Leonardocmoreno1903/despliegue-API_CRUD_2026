@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Consumir API de usuarios</title>
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+    <div class="container mt-5">
+      <a href="crear.html" class="btn btn-success"> Crear Nuevo Usuario </a>
+
+      <hr />
+
+      <h2>LISTADO DE USUARIOS</h2>
+
+      <table id="usuarios-table" class="table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Email</th>
+            <th>Contraseña</th>
+            <th>Actualizar</th>
+            <th>Eliminar</th>
+          </tr>
+        </thead>
+
+        <tbody id="usuarios-body"></tbody>
+      </table>
+
+      <a href="../index.html" class="btn btn-info"> VOLVER </a>
+    </div>
+
+    <script>
+      // URL BASE DE LA API EN RAILWAY
+      const API_URL =
+        "https://despliegue-apicrud2026-production.up.railway.app";
+
+      document.addEventListener("DOMContentLoaded", function () {
+        function cargarUsuarios() {
+          fetch(`${API_URL}/usuarios`)
+            .then((response) => response.json())
+
+            .then((data) => {
+              const usuariosBody = document.getElementById("usuarios-body");
+
+              usuariosBody.innerHTML = "";
+
+              data.forEach((usuario) => {
+                const tr = document.createElement("tr");
+
+                tr.innerHTML = `
+                                <td>${usuario[0]}</td>
+                                <td>${usuario[1]}</td>
+                                <td>${usuario[2]}</td>
+                                <td>${usuario[3]}</td>
+
+                                <td>
+                                    <button class="btn btn-primary"
+                                        onclick="actualizarUsuario(${usuario[0]})">
+                                        Actualizar
+                                    </button>
+                                </td>
+
+                                <td>
+                                    <button class="btn btn-danger"
+                                        onclick="eliminarUsuario(${usuario[0]})">
+                                        Eliminar
+                                    </button>
+                                </td>
+                            `;
+
+                usuariosBody.appendChild(tr);
+              });
+            })
+
+            .catch((error) => console.error("Error: ", error));
+        }
+
+        cargarUsuarios();
+      });
+
+      function eliminarUsuario(id) {
+        fetch(`${API_URL}/eliminar_usuario/${id}`, {
+          method: "DELETE",
+        })
+          .then((response) => response.json())
+
+          .then((data) => {
+            alert(data.mensaje);
+
+            window.location.href = "AdministrarUsuario.html";
+          })
+
+          .catch((error) => console.error("Error: ", error));
+      }
+
+      function actualizarUsuario(id) {
+        window.location.href = `actualizar.html?id=${id}`;
+      }
+    </script>
+  </body>
+</html>
